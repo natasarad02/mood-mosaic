@@ -1,2 +1,2 @@
 # mood-mosaic
-Primer jednostavne serveless aplikacije za seminarski rad iz predmeta Napredne arhitekture informacionih sistema
+Primer jednostavne serverless aplikacije za seminarski rad iz predmeta Napredne arhitekture informacionih sistema
