@@ -1,0 +1,129 @@
+py -m awscli --endpoint-url=http://localhost:4566 --profile localstack apigateway create-resource `  --rest-api-id bzyibylzxv `  --parent-id cnug9blqra `  --path-part moods
+
+
+API_ID : bzyibylzxv
+ROOT_ID : cnug9blqra
+MOODS_ID : ppwxgvos7z
+
+py -m awscli --endpoint-url=http://localhost:4566 --profile localstack apigateway put-method `
+  --rest-api-id bzyibylzxv `
+  --resource-id ppwxgvos7z `
+  --http-method GET `
+  --authorization-type "NONE"
+
+
+py -m awscli --endpoint-url=http://localhost:4566 --profile localstack apigateway put-method `
+  --rest-api-id bzyibylzxv `
+  --resource-id ppwxgvos7z `
+  --http-method POST `
+  --authorization-type "NONE"
+
+
+Lambda integration
+
+py -m awscli --endpoint-url=http://localhost:4566 --profile localstack apigateway put-integration `
+  --rest-api-id bzyibylzxv `
+  --resource-id ppwxgvos7z `
+  --http-method GET `
+  --type AWS_PROXY `
+  --integration-http-method POST `
+  --uri arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:000000000000:function:MoodLambda/invocations
+
+
+py -m awscli --endpoint-url=http://localhost:4566 --profile localstack apigateway put-integration `
+  --rest-api-id bzyibylzxv `
+  --resource-id ppwxgvos7z `
+  --http-method POST `
+  --type AWS_PROXY `
+  --integration-http-method POST `
+  --uri arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:000000000000:function:MoodLambda/invocations
+
+
+
+Deploy the API:
+
+py -m awscli --endpoint-url=http://localhost:4566 --profile localstack apigateway create-deployment `
+    --rest-api-id bzyibylzxv `
+    --stage-name stage
+
+
+
+OPTIONS, za CORS
+
+py -m awscli --endpoint-url=http://localhost:4566 --profile localstack apigateway put-method `
+    --rest-api-id bzyibylzxv `
+    --resource-id ppwxgvos7z `
+    --http-method OPTIONS `
+    --authorization-type NONE
+
+
+
+
+py -m awscli --endpoint-url=http://localhost:4566 --profile localstack apigateway put-integration `
+    --rest-api-id bzyibylzxv `
+    --resource-id ppwxgvos7z `
+    --http-method OPTIONS `
+    --type MOCK `
+    --request-templates '{\"application/json\":\"{\\\"statusCode\\\":200}\"}'
+
+
+py -m awscli --endpoint-url=http://localhost:4566 --profile localstack apigateway put-method-response `
+    --rest-api-id bzyibylzxv `
+    --resource-id ppwxgvos7z `
+    --http-method OPTIONS `
+    --status-code 200 `
+    --response-parameters '{\"method.response.header.Access-Control-Allow-Headers\":true,\"method.response.header.Access-Control-Allow-Methods\":true,\"method.response.header.Access-Control-Allow-Origin\":true}'
+
+
+py -m awscli --endpoint-url=http://localhost:4566 --profile localstack apigateway put-integration-response `
+    --rest-api-id bzyibylzxv `
+    --resource-id ppwxgvos7z `
+    --http-method OPTIONS `
+    --status-code 200 `
+    --response-parameters "`"method.response.header.Access-Control-Allow-Origin`"='*',`"method.response.header.Access-Control-Allow-Headers`"='Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token',`"method.response.header.Access-Control-Allow-Methods`"='OPTIONS,GET,POST'"
+
+
+# Put method response for OPTIONS
+py -m awscli --endpoint-url=http://localhost:4566 --profile localstack apigateway put-method-response `
+    --rest-api-id bzyibylzxv `
+    --resource-id ppwxgvos7z `
+    --http-method OPTIONS `
+    --status-code 200 `
+    --response-parameters '{\"method.response.header.Access-Control-Allow-Headers\":true,\"method.response.header.Access-Control-Allow-Methods\":true,\"method.response.header.Access-Control-Allow-Origin\":true}'
+
+# Put integration response for OPTIONS
+py -m awscli --endpoint-url=http://localhost:4566 --profile localstack apigateway put-integration-response `
+    --rest-api-id bzyibylzxv `
+    --resource-id ppwxgvos7z `
+    --http-method OPTIONS `
+    --status-code 200 `
+    --response-parameters '{\"method.response.header.Access-Control-Allow-Origin\":\"*\",\"method.response.header.Access-Control-Allow-Methods\":\"GET,POST,OPTIONS\",\"method.response.header.Access-Control-Allow-Headers\":\"Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token\"}'
+
+py -m awscli --endpoint-url=http://localhost:4566 --profile localstack apigateway put-method-response `
+    --rest-api-id bzyibylzxv `
+    --resource-id ppwxgvos7z `
+    --http-method GET `
+    --status-code 200 `
+    --response-parameters '{\"method.response.header.Access-Control-Allow-Origin\":true}'
+
+py -m awscli --endpoint-url=http://localhost:4566 --profile localstack apigateway put-method-response `
+    --rest-api-id bzyibylzxv `
+    --resource-id ppwxgvos7z `
+    --http-method POST `
+    --status-code 200 `
+    --response-parameters '{\"method.response.header.Access-Control-Allow-Origin\":true}'
+
+
+py -m awscli --endpoint-url=http://localhost:4566 --profile localstack apigateway put-integration-response `
+    --rest-api-id bzyibylzxv `
+    --resource-id ppwxgvos7z `
+    --http-method GET `
+    --status-code 200 `
+    --response-parameters '{\"method.response.header.Access-Control-Allow-Origin\":\"http://localhost:3000\"}'
+
+py -m awscli --endpoint-url=http://localhost:4566 --profile localstack apigateway put-integration-response `
+    --rest-api-id bzyibylzxv `
+    --resource-id ppwxgvos7z `
+    --http-method POST `
+    --status-code 200 `
+    --response-parameters '{\"method.response.header.Access-Control-Allow-Origin\":\"http://localhost:3000\"}'
