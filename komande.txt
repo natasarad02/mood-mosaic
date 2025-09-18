@@ -127,3 +127,18 @@ py -m awscli --endpoint-url=http://localhost:4566 --profile localstack apigatewa
     --http-method POST `
     --status-code 200 `
     --response-parameters '{\"method.response.header.Access-Control-Allow-Origin\":\"http://localhost:3000\"}'
+
+
+
+
+KREIRANJE LAMBDE
+
+py -m awscli --endpoint-url=http://localhost:4566 --profile localstack lambda create-function `
+    --function-name MoodLambda `
+    --runtime python3.11 `
+    --role arn:aws:iam::000000000000:role/lambda-role `
+    --handler lambda_function.lambda_handler `
+    --zip-file fileb://function.zip `
+    --timeout 10 `
+    --memory-size 128
+

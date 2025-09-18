@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
+import { API_ID } from "./config";
 
 export default function MoodMosaic() {
   const [moods, setMoods] = useState([]);
 
-  const apiId = "bzyibylzxv"; // replace with your actual API ID
+  const apiId = API_ID; // replace with your actual API ID
   const stage = "stage";
 
   useEffect(() => {
