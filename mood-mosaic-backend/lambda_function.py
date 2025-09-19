@@ -40,12 +40,13 @@ def lambda_handler(event, context):
         body = json.loads(event.get('body', '{}'))
         emoji = body.get('emoji', ':)')
         text = body.get('text', '')
+        date = body.get('date', '')
 
         moodItem = {
             'id': str(uuid.uuid4()),
             'emoji': emoji,
             'text': text,
-            'timestamp': datetime.utcnow().isoformat()
+            'timestamp': date
         }
 
         table.put_item(Item=moodItem)
