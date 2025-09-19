@@ -7,9 +7,9 @@ import time
 import requests
 
 # API varijable
-API_NAME = "MoodAPI"
+API_NAME = "MoodTestAPI"
 RESOURCE_PATH = "moods"
-LAMBDA_ARN = "arn:aws:lambda:us-east-1:000000000000:function:MoodLambda"
+LAMBDA_ARN = "arn:aws:lambda:us-east-1:000000000000:function:MoodLambdaTest"
 REGION = "us-east-1"
 
 # LocalStack endpoint
@@ -145,113 +145,22 @@ except apigw.exceptions.NotFoundException:
 
 apigw.create_deployment(
     restApiId=api_id,
-    stageName="stage"
+    stageName="dev"
 )
-print("API deployed to stage 'stage'")
+print("API deployed to stage 'dev'")
 
-# Kreiranje S3 bucket-a
+# --- Test POST request ---
+test_payload = {
+    "emoji": ":D",
+    "text": "Testing Mood POST",
+   
+}
 
-s3 = boto3.client(
-    "s3",
-    endpoint_url="http://localhost:4566",
-    aws_access_key_id="test",
-    aws_secret_access_key="test",
-    region_name="us-east-1"
-)
-
-bucket_name = "mood-images"
-folder_path = "images"
-
+test_url = f"http://localhost:4566/restapis/{api_id}/dev/_user_request_/{RESOURCE_PATH}"
 
 try:
-    s3.create_bucket(Bucket=bucket_name)
-    print(f"Bucket '{bucket_name}' created.")
-except s3.exceptions.BucketAlreadyOwnedByYou:
-    print(f"Bucket '{bucket_name}' already exists.")
-
-
-public_policy = {
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Effect": "Allow",
-            "Principal": "*",
-            "Action": ["s3:GetObject"],
-            "Resource": [f"arn:aws:s3:::{bucket_name}/*"]
-        }
-    ]
-}
-s3.put_bucket_policy(Bucket=bucket_name, Policy=json.dumps(public_policy))
-print(f"Bucket '{bucket_name}' is now public for GET requests.")
-
-
-for filename in os.listdir(folder_path):
-    file_path = os.path.join(folder_path, filename)
-    if os.path.isfile(file_path):
-        s3.upload_file(file_path, bucket_name, filename)
-        print(f"Uploaded file: {filename}")
-
-print("Bucket setup complete")
-
-
-app = Flask(__name__)
-CORS(app, origins="http://localhost:3000")
-
-@app.route("/api/s3-images")
-def get_s3_images():
-    objects = s3.list_objects_v2(Bucket=bucket_name).get("Contents", [])
-    urls = [
-        s3.generate_presigned_url(
-            "get_object",
-            Params={"Bucket": bucket_name, "Key": obj["Key"]},
-            ExpiresIn=3600  # 1 hour valid
-        )
-        for obj in objects
-    ]
-    return jsonify(urls)
-
-@app.route("/api/api-id")  # Pomocna metoda za dobavljanje API_ID
-def get_api_id():
-    apis = apigw.get_rest_apis()["items"]
-    existing_api = next((a for a in apis if a["name"] == API_NAME), None)
-    if existing_api:
-        return jsonify({"apiId": existing_api["id"]})
-    return jsonify({"error": "API not found"}), 404
-
-
-API_GATEWAY_URL = "http://localhost:4566/restapis/<API_ID>/stage/_user_request_/moods"
-FLASK_URL = "http://localhost:5000/api/s3-images"
-NUM_RUNS = 5  # number of test runs
-
-@app.route("/api/performance-test")
-def performance_test_multiple():
-    results = {
-        "api_gateway_get": [],
-        "flask_get": []
-    }
-
-
-    for _ in range(NUM_RUNS):
-        start = time.time()
-        requests.get(API_GATEWAY_URL)
-        end = time.time()
-        results["api_gateway_get"].append(end - start)
-
-    for _ in range(NUM_RUNS):
-        start = time.time()
-        requests.get(FLASK_URL)
-        end = time.time()
-        results["flask_get"].append(end - start)
-
-    summary = {}
-    for key, times in results.items():
-        summary[key] = {
-            "avg": sum(times) / len(times),
-            "min": min(times),
-            "max": max(times)
-        }
-
-    return jsonify(summary)
-
-if __name__ == "__main__":
-    app.run(debug=True, port=5000)
+    response = requests.post(test_url, json=test_payload)
+    print("POST request response status:", response.status_code)
+    print("Response body:", response.json())
+except Exception as e:
+    print("Error sending test POST request:", e)
