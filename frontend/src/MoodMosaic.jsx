@@ -13,16 +13,15 @@ export default function MoodMosaic() {
 useEffect(() => {
   async function fetchMoods() {
     try {
-      const apiIdRes = await getApiId(); // get API ID from Flask
+      const apiIdRes = await getApiId(); 
       if (!apiIdRes) return;
 
       const stage = "stage";
       const url = `http://localhost:4566/restapis/${apiIdRes}/${stage}/_user_request_/moods`;
 
       const res = await fetch(url);
-      const data = await res.json(); // list of moods { id, emoji, text, timestamp, image }
+      const data = await res.json(); 
 
-      // Keep only the newest mood for each day
       const moodsByDay = {};
       data.forEach((mood) => {
         const dateKey = new Date(mood.timestamp).toDateString(); // e.g., "Wed Sep 18 2025"
@@ -31,7 +30,7 @@ useEffect(() => {
         }
       });
 
-      // Convert back to array
+
       const newestMoods = Object.values(moodsByDay);
 
       setImages(newestMoods);
@@ -49,48 +48,52 @@ useEffect(() => {
   };
 
 return (
-  <div style={{ padding: "20px", display: "inline-block" }}>
+  <div className="page-div">
+    <div className="calendar-div">
+  <div  style={{ padding: "2vh" }}>
     <div
       style={{
         display: "grid",
-        gridTemplateColumns: "40px repeat(31, 40px)", // first column for month labels
-        gridAutoRows: "40px",
-        gap: "5px",
+        gridTemplateColumns: "4vh repeat(31, 4vh)", 
+        gridAutoRows: "4vh",
+        gap: "1vh",
       }}
     >
-      {/* Empty top-left corner */}
+ 
       <div></div>
 
-      {/* Day labels 1..31 */}
+   
       {Array.from({ length: 31 }).map((_, i) => (
         <div
           key={`day-${i}`}
           style={{
             textAlign: "center",
             fontWeight: "bold",
-            lineHeight: "40px",
+            lineHeight: "4vh",
+            color: "#e87800"
+          
           }}
         >
           {i + 1}
         </div>
       ))}
 
-      {/* Months and moods */}
       {["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"].map((month, monthIndex) => (
         <React.Fragment key={month}>
-          {/* Month label */}
+       
           <div
             style={{
               textAlign: "right",
-              paddingRight: "5px",
+              paddingRight: "1vh",
               fontWeight: "bold",
-              lineHeight: "40px",
+              lineHeight: "4vh",
+               color: "#e87800"
             }}
           >
             {month}
           </div>
 
-          {/* Mood cells for each day */}
+      
           {Array.from({ length: 31 }).map((_, dayIndex) => {
             const mood = images
               .filter((m) => {
@@ -103,13 +106,14 @@ return (
               <div
                 key={`${monthIndex}-${dayIndex}`}
                 style={{
-                  height: "40px",
-                  width: "40px",
-                  borderRadius: "5px",
+                  height: "4.5vh",
+                  width: "4.5vh",
+                  borderRadius: "1vh",
                   overflow: "hidden",
                   boxShadow: mood ? "0 2px 5px rgba(0,0,0,0.2)" : "none",
                   backgroundColor: mood ? "#fff" : "#f0f0f0",
                   cursor: mood ? "pointer" : "default",
+                  
                 }}
                 title={mood ? mood.text : ""}
               >
@@ -128,7 +132,11 @@ return (
         </React.Fragment>
       ))}
     </div>
-     <button onClick={handleNavigateToAddMood}>Add new</button>
+    <div className="btn-div">
+     <button className="btn"  onClick={handleNavigateToAddMood}>Add new</button>
+ </div>
+  </div>
+  </div>
   </div>
 );
 

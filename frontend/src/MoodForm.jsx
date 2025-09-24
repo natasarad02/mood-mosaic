@@ -61,13 +61,14 @@ export default function MoodForm(){
 
   
  return (
-    <div style={{ padding: "20px" }}>
-      <h2>Post a new mood</h2>
+  <div className="page-div">
+    <div className="form-div" style={{ padding: "2vh" }}>
+      <h2 className="form-title">Post a new mood</h2>
 
-      <form onSubmit={handleSubmit}>
+      <form className="form" onSubmit={handleSubmit}>
         <div>
-          <label>Text: </label>
-          <input
+          <label className="label">Text: </label>
+          <input className="input"
             type="text"
             value={text}
             onChange={(e) => setText(e.target.value)}
@@ -75,9 +76,9 @@ export default function MoodForm(){
           />
         </div>
 
-         <div style={{ marginTop: "10px" }}>
-    <label>Date: </label>
-    <input
+         <div style={{ marginTop: "1vh" }}>
+    <label className="label">Date: </label>
+    <input className="input"
       type="date"
       value={selectedDate}
       onChange={(e) => setSelectedDate(e.target.value)}
@@ -85,19 +86,16 @@ export default function MoodForm(){
     />
   </div>
 
-        <div style={{ marginTop: "10px" }}>
+        <div style={{ marginTop: "1vh" }}>
           <label>Select mood image:</label>
           <div style={{ display: "flex", gap: "10px", marginTop: "5px" }}>
  {s3Images.map((url, i) => (
-  <img
+  <img className="emoji-img"
     key={i}
     src={url} // presigned URL from Flask
     alt={`mood-${i}`}
     style={{
-      width: "80px",
-      height: "80px",
-      border: selectedImage === url ? "3px solid blue" : "1px solid gray",
-      cursor: "pointer",
+      border: selectedImage === url ? "3px solid blue" : "1px solid gray"
     }}
     onClick={() => setSelectedImage(url)}
   />
@@ -105,10 +103,11 @@ export default function MoodForm(){
           </div>
         </div>
 
-        <button type="submit" style={{ marginTop: "20px" }}>
+        <button className="btn" type="submit" style={{ marginTop: "2vh" }}>
           Post Mood
         </button>
       </form>
+    </div>
     </div>
   );
 }

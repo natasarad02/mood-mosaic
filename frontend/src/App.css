@@ -73,3 +73,70 @@
     transform: rotate(-5deg);
   }
 }
+
+.emoji-img{
+    width: 10vh;
+      height: 10vh;
+  
+      cursor: pointer;
+
+}
+
+
+.form-div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 30%;
+  background: linear-gradient(45deg, beige 40%, white 150%);
+  border-radius: 2vh;
+  height: 40vh;
+  margin-top: 20vh;
+}
+.page-div{
+  background: linear-gradient(135deg, darkorange 0%, beige 160%);
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  
+}
+
+.form-title{
+  font-size: 1.8rem;
+   color: #e87800;
+}
+
+.form{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.input{
+  font-size: 1.2rem;
+  border-radius: 1vh;
+  
+  
+}
+
+.label{
+  font-size: 1.2rem;
+}
+
+.calendar-div{
+  background-color: white;
+  height: 80vh;
+  margin-top: 5vh;
+  border-radius: 2vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+ 
+}
+
+
+.btn-div{
+  display: flex;
+  justify-content: center;
+  margin-top: 4vh;
+}
